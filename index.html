@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrendPulse — Live Google trending queries, streamed to you</title>
+<meta name="description" content="TrendPulse streams live Google trending search queries into your workflow — webhook, Google Sheet, or CSV. No scraping your own.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-row">
+    <a href="#top" class="brand">
+      <span class="brand-dot" aria-hidden="true"></span>
+      TrendPulse
+    </a>
+    <nav class="topnav" aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="#pricing" class="btn btn-primary btn-small">Get access</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero wrap">
+    <div class="hero-copy">
+      <p class="kicker">Live search intelligence</p>
+      <h1>Every trending search, the moment it trends.</h1>
+      <p class="hero-sub">
+        TrendPulse watches Google's trending panel across nine country domains and streams
+        every new query straight into your workflow — a webhook, a Google Sheet, or a plain
+        CSV. By the time a topic is trending everywhere, you already published on it.
+      </p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn btn-primary">Start free</a>
+        <a href="#ticker" class="btn btn-ghost">Watch the live feed ↓</a>
+      </div>
+      <dl class="hero-stats">
+        <div><dt>50,000+</dt><dd>queries captured daily</dd></div>
+        <div><dt>&lt;1s</dt><dd>fastest sync interval</dd></div>
+        <div><dt>9</dt><dd>Google domains monitored</dd></div>
+      </dl>
+    </div>
+
+    <div class="hero-demo" id="ticker">
+      <div class="term">
+        <div class="term-bar">
+          <span class="term-dot term-dot-live" aria-hidden="true"></span>
+          <span class="term-title">live-feed</span>
+          <span class="term-status" id="termStatus">streaming</span>
+        </div>
+        <ol class="term-list" id="tickerList" aria-live="polite"></ol>
+      </div>
+      <p class="hero-demo-caption">Simulated preview — connect your key for the real feed.</p>
+    </div>
+  </section>
+
+  <!-- ============ LOGOS / TRUST ============ -->
+  <section class="wrap trust-row">
+    <p class="trust-label">Built for teams who publish first</p>
+    <ul class="trust-list">
+      <li>Newsrooms</li>
+      <li>Content &amp; SEO teams</li>
+      <li>Social media desks</li>
+      <li>Ad ops &amp; growth</li>
+      <li>Trend-driven creators</li>
+    </ul>
+  </section>
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section class="section" id="how">
+    <div class="wrap">
+      <h2>How it works</h2>
+      <ol class="steps">
+        <li>
+          <span class="step-no">1</span>
+          <h3>Capture</h3>
+          <p>Our collector watches Google's trending panel across nine country domains,
+            around the clock, and records every new query the moment it appears.</p>
+        </li>
+        <li>
+          <span class="step-no">2</span>
+          <h3>Stream</h3>
+          <p>Each new query is pushed instantly through your webhook, or written straight
+            into a Google Sheet — All, Rising, Dying, and Published, kept in sync.</p>
+        </li>
+        <li>
+          <span class="step-no">3</span>
+          <h3>Act</h3>
+          <p>Auto-publish the ones you care about, alert your team, or feed the stream
+            straight into your CMS and ad campaigns before the topic peaks.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ FEATURES ============ -->
+  <section class="section section-alt">
+    <div class="wrap">
+      <h2>What you get</h2>
+      <div class="feature-grid">
+        <article class="feature feature-lead">
+          <h3>A feed, not a dashboard you have to babysit</h3>
+          <p>TrendPulse doesn't wait for you to check it. Queries arrive as they happen,
+            newest first, and the ones that go quiet fall away on their own.</p>
+        </article>
+        <article class="feature">
+          <h3>Webhook delivery</h3>
+          <p>Fires to as many endpoints as you need — Make, Zapier, Slack, or your own
+            server. Each one toggled independently.</p>
+        </article>
+        <article class="feature">
+          <h3>Google Sheets sync</h3>
+          <p>All Captured, Rising, Dying, and Published queries, written live to a sheet
+            you already know how to use.</p>
+        </article>
+        <article class="feature">
+          <h3>Auto-publish rules</h3>
+          <p>Whole-word keyword rules decide what gets published automatically, so your
+            team only reviews the judgment calls.</p>
+        </article>
+        <article class="feature">
+          <h3>Full searchable history</h3>
+          <p>Every query, timestamped, exportable to CSV whenever you need the receipts.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PRICING ============ -->
+  <section class="section" id="pricing">
+    <div class="wrap">
+      <h2>Pricing</h2>
+      <p class="section-sub">Start free. Upgrade when the feed starts paying for itself.</p>
+
+      <table class="price-table">
+        <thead>
+          <tr>
+            <th scope="col" class="price-table-plan">Plan</th>
+            <th scope="col">Starter</th>
+            <th scope="col" class="price-table-featured">Pro</th>
+            <th scope="col">Business</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Price</th>
+            <td><span class="price">$0</span></td>
+            <td class="price-table-featured"><span class="price">$29</span><span class="price-period">/mo</span></td>
+            <td><span class="price">$99</span><span class="price-period">/mo</span></td>
+          </tr>
+          <tr>
+            <th scope="row">Domains monitored</th>
+            <td>1</td>
+            <td class="price-table-featured">All 9</td>
+            <td>All 9</td>
+          </tr>
+          <tr>
+            <th scope="row">Queries / day</th>
+            <td>100</td>
+            <td class="price-table-featured">Unlimited</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <th scope="row">Sync interval</th>
+            <td>15 min</td>
+            <td class="price-table-featured">1 sec</td>
+            <td>1 sec</td>
+          </tr>
+          <tr>
+            <th scope="row">Webhooks</th>
+            <td>—</td>
+            <td class="price-table-featured">Unlimited</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <th scope="row">Auto-publish rules</th>
+            <td>—</td>
+            <td class="price-table-featured">✓</td>
+            <td>✓</td>
+          </tr>
+          <tr>
+            <th scope="row">Team seats</th>
+            <td>1</td>
+            <td class="price-table-featured">3</td>
+            <td>Unlimited</td>
+          </tr>
+          <tr>
+            <th scope="row">Support</th>
+            <td>Community</td>
+            <td class="price-table-featured">Email</td>
+            <td>Priority + SLA</td>
+          </tr>
+          <tr class="price-table-cta-row">
+            <th scope="row" class="visually-hidden">Get started</th>
+            <td><a href="#" class="btn btn-ghost btn-small" data-plan="starter">Start free</a></td>
+            <td class="price-table-featured"><a href="#" class="btn btn-primary btn-small" data-plan="pro">Subscribe</a></td>
+            <td><a href="#" class="btn btn-ghost btn-small" data-plan="business">Talk to us</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="section section-alt" id="faq">
+    <div class="wrap wrap-narrow">
+      <h2>Questions</h2>
+      <div class="faq-list">
+        <details>
+          <summary>Is this real Google Trends data?</summary>
+          <p>Yes — TrendPulse reads the same trending panel you'd see on Google Search
+            itself, across nine country domains, rather than a delayed export.</p>
+        </details>
+        <details>
+          <summary>How fast is "live," really?</summary>
+          <p>On the Pro and Business plans, a new query can reach your webhook or sheet
+            in as little as one second from when it first appears. Starter syncs every
+            15 minutes.</p>
+        </details>
+        <details>
+          <summary>Can I cancel anytime?</summary>
+          <p>Yes. Subscriptions are month-to-month with no contract — cancel from your
+            billing portal and you'll keep access until the period ends.</p>
+        </details>
+        <details>
+          <summary>Do you store the queries you capture?</summary>
+          <p>Your captured history is kept for as long as your account is active, so you
+            can search and export it later. You can purge it at any time.</p>
+        </details>
+        <details>
+          <summary>Can I use my own Google Sheet?</summary>
+          <p>Yes — point TrendPulse at any Sheet you control and it keeps four tabs in
+            sync: All Captured, Rising, Dying, and Published.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="section closing">
+    <div class="wrap wrap-narrow closing-inner">
+      <h2>Stop finding out what trended. Watch it trend.</h2>
+      <a href="#pricing" class="btn btn-primary">Start free — no card required</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-row">
+    <a href="#top" class="brand brand-footer">
+      <span class="brand-dot" aria-hidden="true"></span>
+      TrendPulse
+    </a>
+    <p class="footer-note">Built for people who can't afford to be second.</p>
+    <p class="footer-copy">© <span id="year"></span> TrendPulse</p>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
