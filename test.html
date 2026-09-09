@@ -26,7 +26,7 @@
     <section class="seo-page-header wrap test-header">
       <p class="kicker">Live data view</p>
       <h1>Test</h1>
-      <p>The latest details are loaded through a private edge proxy and refreshed every minute.</p>
+      <p>The latest details are loaded from the public sheet and refreshed every minute.</p>
       <p class="test-status" id="sheetStatus" role="status">Loading latest details...</p>
     </section>
 
@@ -48,6 +48,7 @@
     const tableBody = table.querySelector('tbody');
     const status = document.getElementById('sheetStatus');
     const empty = document.getElementById('sheetEmpty');
+    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1IwW_NI0echW37lrJu84eenRXghRSK6Rn7xcrZ-Fvd3M/export?format=csv&gid=779817175';
     const refreshMs = 60000;
 
     function parseCsv(text) {
@@ -103,7 +104,7 @@
 
     async function loadSheet() {
       try {
-        const response = await fetch('/api/sheet', { cache: 'no-store' });
+        const response = await fetch(sheetUrl, { cache: 'no-store' });
         if (!response.ok) throw new Error('The data proxy returned an error.');
         const contentType = response.headers.get('content-type') || '';
         const rows = contentType.includes('json')
@@ -114,7 +115,7 @@
       } catch (error) {
         status.textContent = 'The latest details could not be loaded.';
         empty.hidden = false;
-        empty.textContent = 'Connect the Google Sheet URL in Cloudflare before using this page.';
+        empty.textContent = 'The public Google Sheet could not be loaded right now.';
       }
     }
 
