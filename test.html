@@ -26,11 +26,16 @@
     <section class="seo-page-header wrap test-header">
       <p class="kicker">Live data view</p>
       <h1>Test</h1>
-      <p>The latest details are loaded from the public sheet and refreshed every minute.</p>
+      <p>This is a trial push.</p>
       <p class="test-status" id="sheetStatus" role="status">Loading latest details...</p>
     </section>
 
     <section class="wrap test-table-wrap">
+      <div class="sheet-tabs" role="tablist" aria-label="Query trend views">
+        <button class="sheet-tab is-active" type="button" role="tab" aria-selected="true" data-tab="all">All Queries</button>
+        <button class="sheet-tab" type="button" role="tab" aria-selected="false" data-tab="rising">Rising Queries</button>
+        <button class="sheet-tab" type="button" role="tab" aria-selected="false" data-tab="dying">Dying Queries</button>
+      </div>
       <div class="test-table-scroll">
         <table class="test-table" id="sheetTable">
           <caption class="visually-hidden">Latest details from the connected Google Sheet</caption>
@@ -48,7 +53,14 @@
     const tableBody = table.querySelector('tbody');
     const status = document.getElementById('sheetStatus');
     const empty = document.getElementById('sheetEmpty');
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1IwW_NI0echW37lrJu84eenRXghRSK6Rn7xcrZ-Fvd3M/export?format=csv&gid=779817175';
+    const tabs = {
+      all: { label: 'All Queries', gid: '779817175', arrow: '↑' },
+      rising: { label: 'Rising Queries', gid: '1273884144', arrow: '↑' },
+      dying: { label: 'Dying Queries', gid: '726175016', arrow: '↓' },
+    };
+    let activeTab = 'all';
+    const previousCounts = {};
+    const trendByQuery = {};
     const refreshMs = 60000;
 
     function parseCsv(text) {
@@ -75,7 +87,8 @@
       });
     }
 
-    function renderRows(rows) {
+    function renderRows(rows, tabKey) {
+      if (rows[0] && rows[0][0].startsWith('Exported')) rows.shift();
       tableHead.replaceChildren();
       tableBody.replaceChildren();
       if (!rows.length) {
@@ -83,6 +96,11 @@
         return;
       }
       empty.hidden = true;
+      const headers = rows[0].map(value => value.toLowerCase());
+      const queryIndex = headers.indexOf('search query');
+      const timesSeenIndex = headers.indexOf('times seen');
+      const currentCounts = {};
+      const oldCounts = previousCounts[tabKey] || {};
       const header = document.createElement('tr');
       rows[0].forEach(value => {
         const cell = document.createElement('th');
@@ -90,28 +108,48 @@
         cell.textContent = value;
         header.appendChild(cell);
       });
+      const trendHeader = document.createElement('th');
+      trendHeader.scope = 'col';
+      trendHeader.textContent = 'Trend';
+      header.appendChild(trendHeader);
       tableHead.appendChild(header);
       rows.slice(1).forEach(row => {
+        const query = row[queryIndex] || row[1] || '';
+        const countText = row[timesSeenIndex] || row[2] || '';
+        const count = Number(countText.replace(/,/g, ''));
+        const previousCount = oldCounts[query];
+        const arrow = Number.isFinite(count) && Number.isFinite(previousCount) && count !== previousCount
+          ? count > previousCount ? '↑' : '↓'
+          : trendByQuery[query] || '•';
+        currentCounts[query] = count;
         const tableRow = document.createElement('tr');
         row.forEach(value => {
           const cell = document.createElement('td');
           cell.textContent = value;
           tableRow.appendChild(cell);
         });
+        const trendCell = document.createElement('td');
+        trendCell.className = 'trend-arrow';
+        trendCell.textContent = arrow;
+        trendCell.setAttribute('aria-label', arrow === '↑' ? 'Increased' : arrow === '↓' ? 'Decreased' : 'Unchanged');
+        tableRow.appendChild(trendCell);
         tableBody.appendChild(tableRow);
       });
+      previousCounts[tabKey] = currentCounts;
     }
 
     async function loadSheet() {
       try {
+        const tab = tabs[activeTab];
+        const sheetUrl = `https://docs.google.com/spreadsheets/d/1IwW_NI0echW37lrJu84eenRXghRSK6Rn7xcrZ-Fvd3M/export?format=csv&gid=${tab.gid}`;
         const response = await fetch(sheetUrl, { cache: 'no-store' });
         if (!response.ok) throw new Error('The data proxy returned an error.');
         const contentType = response.headers.get('content-type') || '';
         const rows = contentType.includes('json')
           ? await response.json()
           : parseCsv(await response.text());
-        renderRows(rows);
-        status.textContent = `Updated ${new Date().toLocaleTimeString()}`;
+        renderRows(rows, activeTab);
+        status.textContent = `${tab.label} updated ${new Date().toLocaleTimeString()}`;
       } catch (error) {
         status.textContent = 'The latest details could not be loaded.';
         empty.hidden = false;
@@ -119,8 +157,44 @@
       }
     }
 
-    loadSheet();
-    window.setInterval(loadSheet, refreshMs);
+    async function loadTrendTabs() {
+      const trendTabs = [
+        ['rising', '↑'],
+        ['dying', '↓'],
+      ];
+      await Promise.all(trendTabs.map(async ([tabKey, arrow]) => {
+        const sheetUrl = `https://docs.google.com/spreadsheets/d/1IwW_NI0echW37lrJu84eenRXghRSK6Rn7xcrZ-Fvd3M/export?format=csv&gid=${tabs[tabKey].gid}`;
+        const response = await fetch(sheetUrl, { cache: 'no-store' });
+        if (!response.ok) return;
+        const rows = parseCsv(await response.text());
+        if (rows[0] && rows[0][0].startsWith('Exported')) rows.shift();
+        const headers = rows[0].map(value => value.toLowerCase());
+        const queryIndex = headers.indexOf('search query');
+        rows.slice(1).forEach(row => {
+          const query = row[queryIndex] || row[1] || '';
+          if (query) trendByQuery[query] = arrow;
+        });
+      }));
+    }
+
+    document.querySelectorAll('.sheet-tab').forEach(button => {
+      button.addEventListener('click', () => {
+        activeTab = button.dataset.tab;
+        document.querySelectorAll('.sheet-tab').forEach(tabButton => {
+          const selected = tabButton === button;
+          tabButton.classList.toggle('is-active', selected);
+          tabButton.setAttribute('aria-selected', String(selected));
+        });
+        loadTrendTabs().then(loadSheet);
+      });
+    });
+
+    function refreshData() {
+      loadTrendTabs().then(loadSheet);
+    }
+
+    refreshData();
+    window.setInterval(refreshData, refreshMs);
   </script>
 </body>
 </html>
