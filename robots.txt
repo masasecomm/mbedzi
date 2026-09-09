@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://keywordcatch.com/sitemap.xml
+
+# Note: this is a static marketing site. Add more pages here as the content library expands.

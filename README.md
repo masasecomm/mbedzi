@@ -1,27 +1,55 @@
-# TrendPulse — marketing site
+# KeywordCatch — marketing site
 
 A static landing page for a paid subscription to a live trending-queries feed.
 Plain HTML/CSS/JS — no build step, no framework, so it deploys straight to
 GitHub Pages.
 
-## 1. Deploy to GitHub Pages
+## 1. Deploy to Cloudflare Pages
 
-1. Create a new GitHub repository (public, or private if you're on a paid
-   GitHub plan — Pages needs a public repo on the free plan).
-2. Push these three files (`index.html`, `styles.css`, `script.js`) to the
-   root of the repo's default branch.
-3. In the repo, go to **Settings → Pages**.
-4. Under **Build and deployment**, set **Source** to `Deploy from a branch`,
-   pick your default branch and the `/ (root)` folder, then **Save**.
-5. GitHub gives you a URL like `https://yourname.github.io/your-repo/` —
-   it's live in a minute or two.
-6. Optional: add a custom domain under **Settings → Pages → Custom domain**
-   (you'll need a `CNAME` record at your DNS provider pointing at
-   `yourname.github.io`).
+1. Push the project to a Git repository.
+2. In the [Cloudflare Dashboard](https://dash.cloudflare.com), open **Workers
+   & Pages → Create application → Pages → Connect to Git**.
+3. Select the repository, choose the project root as the build directory, and
+   leave the build command empty because this is a static site.
+4. Deploy the site. Cloudflare Pages automatically detects the `functions/`
+   directory and serves `/api/contact`.
+5. Add the Turnstile secret in **Settings → Environment variables** as:
+   `TURNSTILE_SECRET`.
+6. Add `FORM_SUBMIT_EMAIL` as a secret environment variable with the recipient
+   address. Keep both values out of HTML, JavaScript, Git, and this README.
+7. Use the secret from the existing Turnstile widget. Never put it in HTML,
+   JavaScript, Git, or this README.
 
-That's it for hosting — everything on the page is static.
+For the private live sheet view, add `GOOGLE_SHEET_URL` as another secret
+environment variable. Set it to the Google Sheets CSV or JSON export URL. The
+`test.html` page requests `/api/sheet`, and the Pages Function fetches the
+Google source server-side so visitors cannot see the source URL. The page
+refreshes the data every 60 seconds.
 
-## 2. Wiring up billing
+The contact form requires Cloudflare Pages because Turnstile must be checked
+server-side before the message is forwarded.
+
+## 2. Contact form and Turnstile
+
+The contact form embeds the existing Turnstile widget and posts to the Pages
+Function at `functions/api/contact.js`. That function:
+
+- verifies `cf-turnstile-response` with Cloudflare Siteverify;
+- requires the `contact` action and a successful verification;
+- removes the Turnstile token before forwarding the message to
+   FormSubmit using the private `FORM_SUBMIT_EMAIL` variable.
+
+The function cannot send messages until `TURNSTILE_SECRET` is configured in
+Cloudflare Pages. Do not test the production form until that variable is set.
+
+## 3. Private sheet test page
+
+Open `/test.html` after adding `GOOGLE_SHEET_URL`. The source sheet must be
+available through its export URL to the Cloudflare Worker. For a private sheet,
+use a server-side Google API or service-account integration instead of putting
+credentials in the page; never expose a Google access token in the browser.
+
+## 4. Wiring up billing
 
 GitHub Pages can only serve static files, so there's no server here to
 process payments. The standard way to sell a subscription from a static
@@ -30,7 +58,7 @@ just link to it:
 
 1. In the [Stripe Dashboard](https://dashboard.stripe.com), go to
    **Product catalog → Add product**, and create one product per plan
-   (e.g. "TrendPulse Pro", $29/month recurring).
+   (e.g. "KeywordCatch Pro", $29/month recurring).
 2. On each product, click **Create payment link**. Stripe gives you a URL
    like `https://buy.stripe.com/xxxxxxxx`.
 3. Open `script.js` and paste your links into `CHECKOUT_LINKS`:
@@ -55,7 +83,7 @@ tool like Zapier/Make, which this product already streams into) to grant
 access — that part does need something other than GitHub Pages, since it's
 server-side logic.
 
-## 3. Connecting a real feed
+## 5. Connecting a real feed
 
 The hero terminal currently loops over a small hardcoded sample list in
 `script.js` (`SAMPLE_QUERIES`) purely for visual demo purposes — it's
@@ -64,14 +92,14 @@ instead, replace the `pushRow()` logic with a call to wherever your feed
 actually lives (e.g. poll an API endpoint, or open a WebSocket/SSE
 connection) and push each real query into the terminal the same way.
 
-## 4. Customizing
+## 6. Customizing
 
 - **Colors, type, spacing** — all in `styles.css`, driven by the CSS
   custom properties at the top of the file (`:root { ... }`).
 - **Copy** — all in `index.html`, plain text, no templating.
 - **Pricing numbers** — the `<table class="price-table">` in `index.html`.
 - **Rename the product** — search `index.html` and `styles.css`... actually
-  just `index.html` for "TrendPulse" and swap in your name; there's no
+  just `index.html` for "KeywordCatch" and swap in your name; there's no
   other place it's referenced.
 
 ## File structure
@@ -79,6 +107,8 @@ connection) and push each real query into the terminal the same way.
 ```
 index.html    All page markup and copy
 styles.css    All styling (design tokens at the top)
-script.js     Live-feed demo animation + pricing button links
+   script.js     Live-feed demo + contact form behavior
+   test.html     Private live Google Sheet view
+   functions/    Cloudflare Pages server-side handlers
 README.md     This file
 ```

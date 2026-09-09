@@ -1,5 +1,5 @@
 /* ============================================================
-   TrendPulse — site script
+   KeywordCatch — site script
    Two independent jobs:
    1. Animate the hero "live feed" terminal with sample data.
    2. Send each pricing button to the right place — a Stripe
@@ -16,21 +16,21 @@ document.getElementById('year').textContent = new Date().getFullYear();
    (see README "Connecting a real feed").
    ------------------------------------------------------------ */
 const SAMPLE_QUERIES = [
-  ['Sports', 'Champions League draw'],
-  ['Entertainment', 'season finale reactions'],
-  ['Tech', 'new chip benchmark leak'],
-  ['Politics', 'budget vote results'],
-  ['Weather', 'coastal storm warning'],
-  ['Sports', 'transfer window news'],
-  ['Business', 'quarterly earnings call'],
-  ['Entertainment', 'trailer drops early'],
-  ['Tech', 'outage reports spike'],
-  ['Science', 'eclipse viewing times'],
-  ['Sports', 'match highlights'],
-  ['Politics', 'policy announcement'],
-  ['Entertainment', 'award show reactions'],
-  ['Business', 'ipo pricing news'],
-  ['Tech', 'update rollout issues'],
+  ['People', 'Leon Schuster'],
+  ['Politics', 'Andile Lungisa'],
+  ['Health', 'hair loss'],
+  ['Politics', 'Andile Lungisa'],
+  ['Local', 'slade thomas durban'],
+  ['Books', 'the early spring novel ending'],
+  ['Sports', 'Jody February'],
+  ['People', 'Leon Schuster South African filmmaker'],
+  ['Politics', 'Andile Lungisa ANC Youth League'],
+  ['Health', 'hair loss'],
+  ['Local', 'slade thomas durban'],
+  ['Books', 'the early spring novel ending'],
+  ['Sports', 'Jody February South African soccer player'],
+  ['People', 'Leon Schuster South African filmmaker'],
+  ['Politics', 'Andile Lungisa'],
 ];
 
 const tickerList = document.getElementById('tickerList');
@@ -43,17 +43,49 @@ function timeLabel() {
   return now.toTimeString().slice(0, 8);
 }
 
+function updatePositions() {
+  Array.from(tickerList.children).forEach((item, index) => {
+    const pos = item.querySelector('.pos');
+    const trend = item.querySelector('.trend');
+    const direction = item.dataset.direction || (index < 4 ? 'up' : 'down');
+
+    if (pos) pos.textContent = `#${index + 1}`;
+    if (trend) {
+      trend.textContent = direction === 'up' ? '↑' : '↓';
+      trend.classList.toggle('trend-up', direction === 'up');
+      trend.classList.toggle('trend-down', direction === 'down');
+      trend.setAttribute('aria-label', `moving ${direction}`);
+    }
+
+    item.classList.toggle('trend-up-row', direction === 'up');
+    item.classList.toggle('trend-down-row', direction === 'down');
+    item.dataset.direction = direction;
+  });
+}
+
 function pushRow() {
   const [cat, q] = SAMPLE_QUERIES[cursor % SAMPLE_QUERIES.length];
   cursor += 1;
 
+  const direction = (cursor + 1) % 3 === 0 || (cursor + 1) % 5 === 0 ? 'up' : 'down';
+
   const li = document.createElement('li');
-  li.innerHTML = `<span class="t">${timeLabel()}</span><span class="cat">${cat}</span><span class="q">${q}</span>`;
+  li.dataset.direction = direction;
+  li.innerHTML = `
+    <span class="word-bar"></span>
+    <span class="pos">#1</span>
+    <span class="trend ${direction === 'up' ? 'trend-up' : 'trend-down'}" aria-label="moving ${direction}">${direction === 'up' ? '↑' : '↓'}</span>
+    <span class="t">${timeLabel()}</span>
+    <span class="cat">${cat}</span>
+    <span class="q">${q}</span>
+  `;
   tickerList.prepend(li);
 
   while (tickerList.children.length > MAX_ROWS) {
     tickerList.removeChild(tickerList.lastElementChild);
   }
+
+  updatePositions();
 }
 
 function startTicker() {
@@ -72,29 +104,93 @@ if (tickerList) {
 }
 
 /* ------------------------------------------------------------
-   2. Pricing buttons -> checkout
-   Fill these in once you've created Payment Links in your Stripe
-   Dashboard (Products -> your plan -> Create payment link). Each
-   one is a plain hosted checkout URL — no backend required.
-   See README "Wiring up billing" for the full walkthrough.
+   2. Contact form
+   Country is detected from the visitor's IP, with the select kept
+   available as a fallback when the lookup cannot identify them.
    ------------------------------------------------------------ */
-const CHECKOUT_LINKS = {
-  starter: '#',                                  // free plan — point this at your signup page
-  pro: 'https://buy.stripe.com/REPLACE_WITH_PRO_LINK',
-  business: 'https://buy.stripe.com/REPLACE_WITH_BUSINESS_LINK',
-};
+const contactForm = document.getElementById('contactForm');
+const countrySelect = document.getElementById('country');
+const countryStatus = document.getElementById('countryStatus');
+const formStatus = document.getElementById('formStatus');
 
-document.querySelectorAll('[data-plan]').forEach(btn => {
-  const plan = btn.getAttribute('data-plan');
-  const url = CHECKOUT_LINKS[plan];
-  if (url && url !== '#') {
-    btn.setAttribute('href', url);
-    btn.setAttribute('target', '_blank');
-    btn.setAttribute('rel', 'noopener');
-  } else if (plan === 'starter') {
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      alert('Wire this button to your signup / account-creation page — see README.md.');
+if (countrySelect) {
+  fetch('https://ipapi.co/json/')
+    .then(response => {
+      if (!response.ok) throw new Error('Country lookup failed');
+      return response.json();
+    })
+    .then(location => {
+      const detectedCountry = Array.from(countrySelect.options)
+        .find(option => option.textContent === location.country_name);
+      countrySelect.value = detectedCountry ? detectedCountry.value : 'Other';
+      if (countryStatus) countryStatus.textContent = detectedCountry
+        ? 'Country detected automatically. You can change it if needed.'
+        : 'Country detected, but it is not in the list. Please choose an option.';
+    })
+    .catch(() => {
+      if (countryStatus) countryStatus.textContent = 'We could not detect your country. Please choose one.';
     });
-  }
-});
+}
+
+if (contactForm) {
+  contactForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const submitButton = contactForm.querySelector('button[type="submit"]');
+    const formData = new FormData(contactForm);
+    const planDetails = {
+      starter: 'Starter ($25, RSA monitoring, 15-minute sync, 1 team seat)',
+      pro: 'Pro ($49/month, RSA monitoring, 1-second sync, 1 webhook, 2 team seats)',
+      business: 'Business ($99/month, RSA+ monitoring, 1-second sync, unlimited webhooks and seats)',
+    };
+    const linkedPlan = new URLSearchParams(window.location.search).get('plan');
+
+    if (planDetails[linkedPlan]) {
+      formData.append('Pricing context', planDetails[linkedPlan]);
+    }
+
+    const turnstileToken = formData.get('cf-turnstile-response');
+    if (typeof turnstileToken !== 'string' || turnstileToken.length === 0) {
+      if (formStatus) formStatus.textContent = 'Please complete the security check before sending.';
+      return;
+    }
+
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending...';
+
+    fetch(contactForm.action, {
+      method: 'POST',
+      body: formData,
+      headers: { Accept: 'application/json' },
+    })
+      .then(response => {
+        if (!response.ok) throw new Error('Message could not be sent');
+        contactForm.reset();
+        if (formStatus) formStatus.textContent = 'Thanks. Your message has been sent.';
+      })
+      .catch(() => {
+        if (formStatus) formStatus.textContent = 'We could not send the message. Please try again.';
+      })
+      .finally(() => {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send message';
+        if (window.turnstile) window.turnstile.reset();
+      });
+  });
+}
+
+const menuToggle = document.querySelector('.menu-toggle');
+const mobileMenu = document.querySelector('.mobile-menu');
+
+if (menuToggle && mobileMenu) {
+  menuToggle.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('is-open');
+    menuToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.remove('is-open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
