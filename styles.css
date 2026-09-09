@@ -694,6 +694,29 @@ p { margin: 0 0 1em; }
 .test-table-wrap {
   padding-bottom: 80px;
 }
+.sheet-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.sheet-tab {
+  border: 1px solid #cfe5f2;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 9px 14px;
+  cursor: pointer;
+}
+.sheet-tab.is-active,
+.sheet-tab:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #ffffff;
+}
 .test-table-scroll {
   overflow-x: auto;
   border: 1px solid var(--line);
@@ -719,6 +742,17 @@ p { margin: 0 0 1em; }
 }
 .test-table tr:last-child td {
   border-bottom: 0;
+}
+.trend-arrow {
+  width: 72px;
+  color: var(--green);
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center !important;
+}
+.sheet-tab[data-tab="dying"] + .sheet-tab,
+.test-table .trend-arrow[aria-label="Dying"] {
+  color: var(--coral-deep);
 }
 .test-empty {
   margin-top: 16px;
