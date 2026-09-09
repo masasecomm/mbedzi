@@ -1,5 +1,7 @@
 export async function onRequestGet(context) {
   const sourceUrl = context.env.GOOGLE_SHEET_URL;
+  const requestedGid = new URL(context.request.url).searchParams.get('gid');
+  const allowedGids = new Set(['779817175', '1273884144', '726175016']);
 
   if (typeof sourceUrl !== 'string' || sourceUrl.trim() === '') {
     return new Response(JSON.stringify({ error: 'Sheet source is not configured.' }), {
@@ -11,6 +13,7 @@ export async function onRequestGet(context) {
   let source;
   try {
     source = new URL(sourceUrl);
+    if (requestedGid && allowedGids.has(requestedGid)) source.searchParams.set('gid', requestedGid);
   } catch {
     return new Response(JSON.stringify({ error: 'Sheet source is invalid.' }), {
       status: 500,
