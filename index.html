@@ -3,10 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NPL1SN04KD"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NPL1SN04KD');
+</script>
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#dfefff">
 <meta name="description" content="KeywordCatch is a live keyword tracker for monitoring trending internet searches, rising topics, and high-intent keywords across markets — with webhook and spreadsheet delivery.">
-<meta name="keywords" content="live keyword tracker, trending keyword tool, internet keyword monitor, keyword monitoring software, trending search keywords, SEO keyword tracking, keyword alerts">
 <title>KeywordCatch | Live keyword tracker for trending internet searches</title>
 <link rel="canonical" href="https://keywordcatch.com/">
 <meta property="og:type" content="website">
@@ -14,6 +21,7 @@
 <meta property="og:description" content="Track rising keyword trends in real time, export to spreadsheets, and send alerts where your team works.">
 <meta property="og:url" content="https://keywordcatch.com/">
 <meta property="og:site_name" content="KeywordCatch">
+<meta property="og:locale" content="en_US">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="KeywordCatch | Live keyword tracker for trending internet searches">
 <meta name="twitter:description" content="Monitor internet trending keywords and react before they peak.">
@@ -26,7 +34,7 @@
 
 <header class="topbar">
   <div class="wrap topbar-row">
-    <a href="#top" class="brand">
+    <a href="/" class="brand">
       <span class="brand-dot" aria-hidden="true"></span>
       KeywordCatch
     </a>
@@ -98,7 +106,6 @@
       <span>Google</span>
       <span>Yandex</span>
       <span>Baidu</span>
-      <span>Apple Business Connect</span>
     </div>
   </section>
 
@@ -292,23 +299,39 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "KeywordCatch",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Web",
-  "description": "KeywordCatch is a live keyword tracker for monitoring internet trending searches, rising keyword opportunities, and search-intent signals in real time.",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD",
-    "category": "Subscription",
-    "availability": "https://schema.org/InStock"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "KeywordCatch"
-  }
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://keywordcatch.com/#organization",
+      "name": "KeywordCatch",
+      "url": "https://keywordcatch.com/"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://keywordcatch.com/#website",
+      "url": "https://keywordcatch.com/",
+      "name": "KeywordCatch",
+      "publisher": { "@id": "https://keywordcatch.com/#organization" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "KeywordCatch",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Web",
+      "description": "KeywordCatch is a live keyword tracker for monitoring internet trending searches, rising keyword opportunities, and search-intent signals in real time.",
+      "publisher": { "@id": "https://keywordcatch.com/#organization" }
+    }
+  ]
 }
+</script>
+<script>
+  if (window.location.pathname.endsWith('/index.html')) {
+    // Replace /index.html with / while keeping query params & hashes
+    const cleanPath = window.location.pathname.replace(/\/index\.html$/, '/')
+                    + window.location.search
+                    + window.location.hash;
+    window.history.replaceState(null, '', cleanPath);
+  }
 </script>
 <script src="script.js"></script>
 </body>

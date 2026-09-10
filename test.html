@@ -3,6 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NPL1SN04KD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NPL1SN04KD');
+  </script>
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Private live data view powered by KeywordCatch.">
   <meta name="referrer" content="same-origin">
@@ -12,12 +20,12 @@
 <body class="seo-page test-page">
   <header class="topbar">
     <div class="wrap topbar-row">
-      <a href="index.html" class="brand">
+      <a href="/" class="brand">
         <span class="brand-dot" aria-hidden="true"></span>
         KeywordCatch
       </a>
       <nav class="topnav" aria-label="Primary navigation">
-        <a href="index.html">Home</a>
+        <a href="/">Home</a>
         <a href="contact.html">Contact</a>
       </nav>
     </div>
@@ -227,6 +235,15 @@
 
     loadSheets();
     window.setInterval(loadSheets, refreshMs);
+  </script>
+  <script>
+    if (window.location.pathname.endsWith('/index.html')) {
+      // Replace /index.html with / while keeping query params & hashes
+      const cleanPath = window.location.pathname.replace(/\/index\.html$/, '/')
+                      + window.location.search
+                      + window.location.hash;
+      window.history.replaceState(null, '', cleanPath);
+    }
   </script>
 </body>
 </html>

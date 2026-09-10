@@ -3,29 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NPL1SN04KD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NPL1SN04KD');
+  </script>
   <meta name="robots" content="index, follow">
   <meta name="description" content="Contact KeywordCatch about live keyword tracking, country coverage, partnerships, and early access.">
   <title>Contact KeywordCatch | Live keyword tracking</title>
   <link rel="canonical" href="https://keywordcatch.com/contact.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Contact KeywordCatch | Live keyword tracking">
+  <meta property="og:description" content="Contact KeywordCatch about coverage, partnerships, and live keyword tracking.">
+  <meta property="og:url" content="https://keywordcatch.com/contact.html">
+  <meta property="og:site_name" content="KeywordCatch">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact KeywordCatch">
+  <meta name="twitter:description" content="Contact KeywordCatch about live keyword tracking and coverage.">
   <link rel="stylesheet" href="styles.css">
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body class="seo-page">
   <header class="topbar">
     <div class="wrap topbar-row">
-      <a href="index.html" class="brand">
+      <a href="/" class="brand">
         <span class="brand-dot" aria-hidden="true"></span>
         KeywordCatch
       </a>
 
       <nav class="topnav" aria-label="Primary navigation">
-        <a href="index.html#how">How it works</a>
-        <a href="index.html#pricing">Pricing</a>
-        <a href="index.html#faq">FAQ</a>
+        <a href="/#how">How it works</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/#faq">FAQ</a>
         <a href="contact.html">Contact</a>
       </nav>
 
-      <a href="index.html#pricing" class="btn btn-primary btn-small desktop-only">Get access</a>
+      <a href="/#pricing" class="btn btn-primary btn-small desktop-only">Get access</a>
     </div>
   </header>
 
@@ -80,7 +96,7 @@
 
   <footer class="footer">
     <div class="wrap footer-row">
-      <a href="index.html" class="brand brand-footer">
+      <a href="/" class="brand brand-footer">
         <span class="brand-dot" aria-hidden="true"></span>
         KeywordCatch
       </a>
@@ -88,6 +104,15 @@
     </div>
   </footer>
 
+  <script>
+    if (window.location.pathname.endsWith('/index.html')) {
+      // Replace /index.html with / while keeping query params & hashes
+      const cleanPath = window.location.pathname.replace(/\/index\.html$/, '/')
+                      + window.location.search
+                      + window.location.hash;
+      window.history.replaceState(null, '', cleanPath);
+    }
+  </script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -3,28 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NPL1SN04KD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NPL1SN04KD');
+  </script>
   <title>Live keyword tracker for rising internet trends</title>
   <meta name="description" content="KeywordCatch is a live keyword tracker that helps teams monitor rising internet trends, capture trending search terms, and act before a topic peaks.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://keywordcatch.com/keyword-tracker.html">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Live keyword tracker for rising internet trends | KeywordCatch">
+  <meta property="og:description" content="Monitor rising internet trends, capture trending search terms, and act before a topic peaks.">
+  <meta property="og:url" content="https://keywordcatch.com/keyword-tracker.html">
+  <meta property="og:site_name" content="KeywordCatch">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Live keyword tracker for rising internet trends | KeywordCatch">
+  <meta name="twitter:description" content="Monitor rising internet trends and act before a topic peaks.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="seo-page">
   <header class="topbar">
     <div class="wrap topbar-row">
-      <a href="index.html" class="brand">
+      <a href="/" class="brand">
         <span class="brand-dot" aria-hidden="true"></span>
         KeywordCatch
       </a>
 
       <nav class="topnav" aria-label="Primary navigation">
-        <a href="index.html#how">How it works</a>
+        <a href="/#how">How it works</a>
         <a href="keyword-tracker.html">Keyword tracker</a>
         <a href="trending-keywords.html">Trending keywords</a>
-        <a href="index.html#pricing">Pricing</a>
+        <a href="/#pricing">Pricing</a>
       </nav>
 
-      <a href="index.html#pricing" class="btn btn-primary btn-small desktop-only">Get access</a>
+      <a href="/#pricing" class="btn btn-primary btn-small desktop-only">Get access</a>
     </div>
   </header>
 
@@ -36,8 +52,8 @@
         A keyword tracker is not a nice-to-have if you are trying to move fast. It is the difference between noticing a trend early and finding out about it after the wave has already passed.
       </p>
       <div class="hero-actions">
-        <a href="index.html#pricing" class="btn btn-primary">Start free</a>
-        <a href="index.html" class="btn btn-ghost">Back to homepage</a>
+        <a href="/#pricing" class="btn btn-primary">Start free</a>
+        <a href="/" class="btn btn-ghost">Back to homepage</a>
       </div>
     </section>
 
@@ -69,7 +85,7 @@
 
   <footer class="footer">
     <div class="wrap footer-row">
-      <a href="index.html" class="brand brand-footer">
+      <a href="/" class="brand brand-footer">
         <span class="brand-dot" aria-hidden="true"></span>
         KeywordCatch
       </a>
@@ -78,6 +94,15 @@
     </div>
   </footer>
 
+  <script>
+    if (window.location.pathname.endsWith('/index.html')) {
+      // Replace /index.html with / while keeping query params & hashes
+      const cleanPath = window.location.pathname.replace(/\/index\.html$/, '/')
+                      + window.location.search
+                      + window.location.hash;
+      window.history.replaceState(null, '', cleanPath);
+    }
+  </script>
   <script src="script.js"></script>
 </body>
 </html>

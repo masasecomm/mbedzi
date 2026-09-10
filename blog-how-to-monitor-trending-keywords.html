@@ -3,25 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NPL1SN04KD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NPL1SN04KD');
+  </script>
   <title>How to monitor trending keywords without guessing | KeywordCatch</title>
   <meta name="description" content="Learn how to monitor trending keywords with a clear process: focus on momentum, relevance, and timing instead of chasing every spike.">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://keywordcatch.com/blog-how-to-monitor-trending-keywords.html">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="How to monitor trending keywords without guessing | KeywordCatch">
+  <meta property="og:description" content="Use momentum, relevance, and timing to monitor trending keywords more effectively.">
+  <meta property="og:url" content="https://keywordcatch.com/blog-how-to-monitor-trending-keywords.html">
+  <meta property="og:site_name" content="KeywordCatch">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="How to monitor trending keywords without guessing">
+  <meta name="twitter:description" content="Use momentum, relevance, and timing to monitor trending keywords more effectively.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="seo-page">
   <header class="topbar">
     <div class="wrap topbar-row">
-      <a href="index.html" class="brand">
+      <a href="/" class="brand">
         <span class="brand-dot" aria-hidden="true"></span>
         KeywordCatch
       </a>
       <nav class="topnav" aria-label="Primary navigation">
-        <a href="index.html#how">How it works</a>
+        <a href="/#how">How it works</a>
         <a href="keyword-tracker.html">Keyword tracker</a>
         <a href="blog.html">Blog</a>
       </nav>
-      <a href="index.html#pricing" class="btn btn-primary btn-small desktop-only">Get access</a>
+      <a href="/#pricing" class="btn btn-primary btn-small desktop-only">Get access</a>
     </div>
   </header>
 
@@ -48,11 +64,16 @@
         <li>Would it help your content, campaign, or product work?</li>
       </ul>
     </section>
+
+    <section class="wrap seo-section">
+      <h2>Keep learning</h2>
+      <p>Start with <a href="blog-what-is-a-live-keyword-tracker.html">what a live keyword tracker does</a> or learn <a href="blog-turn-trending-keywords-into-content-ideas.html">how to turn trends into content ideas</a>.</p>
+    </section>
   </main>
 
   <footer class="footer">
     <div class="wrap footer-row">
-      <a href="index.html" class="brand brand-footer">
+      <a href="/" class="brand brand-footer">
         <span class="brand-dot" aria-hidden="true"></span>
         KeywordCatch
       </a>
@@ -61,6 +82,27 @@
     </div>
   </footer>
 
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "How to monitor trending keywords without guessing",
+    "description": "Learn how to monitor trending keywords with a clear process: focus on momentum, relevance, and timing instead of chasing every spike.",
+    "mainEntityOfPage": "https://keywordcatch.com/blog-how-to-monitor-trending-keywords.html",
+    "publisher": { "@id": "https://keywordcatch.com/#organization" },
+    "author": { "@type": "Organization", "name": "KeywordCatch" }
+  }
+  </script>
+
+  <script>
+    if (window.location.pathname.endsWith('/index.html')) {
+      // Replace /index.html with / while keeping query params & hashes
+      const cleanPath = window.location.pathname.replace(/\/index\.html$/, '/')
+                      + window.location.search
+                      + window.location.hash;
+      window.history.replaceState(null, '', cleanPath);
+    }
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
