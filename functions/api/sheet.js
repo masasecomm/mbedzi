@@ -1,7 +1,24 @@
 export async function onRequestGet(context) {
   const sourceUrl = context.env.GOOGLE_SHEET_URL;
+  const requestUrl = new URL(context.request.url);
+  const referer = context.request.headers.get('Referer');
   const requestedGid = new URL(context.request.url).searchParams.get('gid');
   const allowedGids = new Set(['779817175', '1273884144', '726175016']);
+
+  let refererPath = '';
+  try {
+    const refererUrl = referer ? new URL(referer) : null;
+    if (refererUrl && refererUrl.origin === requestUrl.origin) refererPath = refererUrl.pathname;
+  } catch {
+    refererPath = '';
+  }
+
+  if (refererPath !== '/test.html' && refererPath !== '/test') {
+    return new Response(JSON.stringify({ error: 'This data is available only on the test page.' }), {
+      status: 403,
+      headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+    });
+  }
 
   if (typeof sourceUrl !== 'string' || sourceUrl.trim() === '') {
     return new Response(JSON.stringify({ error: 'Sheet source is not configured.' }), {
