@@ -26,7 +26,7 @@
   <main>
     <section class="seo-page-header wrap test-header">
       <p class="kicker">Live data view</p>
-      <h1>Test</h1>
+      <h1><span class="country-flag" role="img" aria-label="South Africa">🇿🇦</span> Test</h1>
       <p>This is a trial push. Details are loaded through the private edge proxy.</p>
       <p class="test-status" id="sheetStatus" role="status">Loading latest details...</p>
     </section>
@@ -155,7 +155,7 @@
 
     function renderTabs() {
       tabList.replaceChildren();
-      Object.keys(sheets).forEach(sheetName => {
+      Object.keys(sheets).filter(sheetName => sheetName.toLowerCase() !== 'published').forEach(sheetName => {
         const button = document.createElement('button');
         button.className = 'sheet-tab';
         button.type = 'button';
@@ -210,7 +210,7 @@
         if (payload.error) throw new Error(payload.error);
         if (!payload.sheets || typeof payload.sheets !== 'object') throw new Error('No sheet tabs were returned.');
         sheets = payload.sheets;
-        const sheetNames = Object.keys(sheets);
+        const sheetNames = Object.keys(sheets).filter(sheetName => sheetName.toLowerCase() !== 'published');
         if (!sheetNames.length) throw new Error('No sheet tabs were returned.');
         if (!activeSheet || !sheets[activeSheet]) activeSheet = sheetNames[0];
         renderTabs();

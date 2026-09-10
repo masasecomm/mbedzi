@@ -687,6 +687,13 @@ p { margin: 0 0 1em; }
 .test-header {
   padding-bottom: 24px;
 }
+.country-flag {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 0.72em;
+  letter-spacing: 0;
+  vertical-align: 0.08em;
+}
 .test-status {
   color: var(--ink-soft);
   font-size: 13px;
