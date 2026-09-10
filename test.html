@@ -42,6 +42,7 @@
       </div>
       <p class="test-empty" id="sheetEmpty" hidden>No details are available yet.</p>
     </section>
+    <!-- Orphaned script fragment retained temporarily below for safe replacement.
     const empty = document.getElementById('sheetEmpty');
 
             function renderTabs() {
@@ -137,3 +138,95 @@
 
                 loadSheets();
                 window.setInterval(loadSheets, refreshMs);
+    -->
+  </main>
+
+  <script>
+    const table = document.getElementById('sheetTable');
+    const tableHead = table.querySelector('thead');
+    const tableBody = table.querySelector('tbody');
+    const tabList = document.querySelector('.sheet-tabs');
+    const status = document.getElementById('sheetStatus');
+    const empty = document.getElementById('sheetEmpty');
+    const workerUrl = 'https://api.keywordcatch.com/';
+    const refreshMs = 30000;
+    let sheets = {};
+    let activeSheet = '';
+
+    function renderTabs() {
+      tabList.replaceChildren();
+      Object.keys(sheets).forEach(sheetName => {
+        const button = document.createElement('button');
+        button.className = 'sheet-tab';
+        button.type = 'button';
+        button.role = 'tab';
+        button.textContent = sheetName;
+        button.setAttribute('aria-selected', String(sheetName === activeSheet));
+        button.classList.toggle('is-active', sheetName === activeSheet);
+        button.addEventListener('click', () => {
+          activeSheet = sheetName;
+          renderTabs();
+          renderSheet(sheets[activeSheet]);
+        });
+        tabList.appendChild(button);
+      });
+    }
+
+    function renderSheet(sheet) {
+      tableHead.replaceChildren();
+      tableBody.replaceChildren();
+      if (!sheet || sheet.error || !Array.isArray(sheet.columns) || !Array.isArray(sheet.data) || !sheet.data.length) {
+        empty.hidden = false;
+        empty.textContent = sheet?.error ? `The sheet could not be loaded: ${sheet.error}` : 'No details are available yet.';
+        return;
+      }
+
+      empty.hidden = true;
+      const header = document.createElement('tr');
+      sheet.columns.forEach(column => {
+        const cell = document.createElement('th');
+        cell.scope = 'col';
+        cell.textContent = column;
+        header.appendChild(cell);
+      });
+      tableHead.appendChild(header);
+
+      sheet.data.forEach(row => {
+        const tableRow = document.createElement('tr');
+        sheet.columns.forEach(column => {
+          const cell = document.createElement('td');
+          cell.textContent = row[column] ?? '';
+          tableRow.appendChild(cell);
+        });
+        tableBody.appendChild(tableRow);
+      });
+    }
+
+    async function loadSheets() {
+      try {
+        const response = await fetch(workerUrl, { cache: 'no-store' });
+        if (!response.ok) throw new Error('The data proxy returned an error.');
+        const payload = await response.json();
+        if (payload.error) throw new Error(payload.error);
+        if (!payload.sheets || typeof payload.sheets !== 'object') throw new Error('No sheet tabs were returned.');
+        sheets = payload.sheets;
+        const sheetNames = Object.keys(sheets);
+        if (!sheetNames.length) throw new Error('No sheet tabs were returned.');
+        if (!activeSheet || !sheets[activeSheet]) activeSheet = sheetNames[0];
+        renderTabs();
+        renderSheet(sheets[activeSheet]);
+        status.textContent = `Updated ${new Date().toLocaleTimeString()}`;
+      } catch (error) {
+        tableHead.replaceChildren();
+        tableBody.replaceChildren();
+        empty.hidden = false;
+        empty.textContent = error.message || 'The Google Sheet could not be loaded right now.';
+        status.textContent = 'The latest details could not be loaded.';
+      }
+    }
+
+    loadSheets();
+    window.setInterval(loadSheets, refreshMs);
+  </script>
+</body>
+</html>
