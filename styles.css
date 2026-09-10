@@ -198,6 +198,10 @@ p { margin: 0 0 1em; }
   .mobile-menu .btn {
     width: fit-content;
   }
+
+  .mobile-menu .btn-primary {
+    color: #ffffff;
+  }
 }
 
 @media (min-width: 721px) {
